@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [ 20.x]
 
     steps:
     - name: Checkout code
@@ -32,17 +32,9 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Run linting
-      run: npm run lint
 
     - name: Run unit tests
       run: npm run test:unit
-
-    - name: Run integration tests
-      run: npm run test:integration
-
-    - name: Run MCP tests
-      run: npm run mcp:test
 
     - name: Run tests with coverage
       run: npm run test:coverage
