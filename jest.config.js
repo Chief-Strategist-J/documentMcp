@@ -13,18 +13,24 @@ module.exports = {
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
-  moduleNameMapping: {
+  moduleNameMapper: {                          // fix: was moduleNameMapping (typo)
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
   reporters: [
     'default',
     [
-      'jest-allure',
+      'allure-jest',
       {
-        resultsDir: 'allure-results',
-        disableWebdriverStepsReporting: true,
-        disableWebdriverScreenshotsReporting: true,
+        resultsDir: 'allure-results',          // must match results-directory in CI
+        testMode: true,
+        suiteTitle: false,
+        links: {
+          issue: {
+            nameTemplate: 'Issue #%s',
+            urlTemplate: 'https://github.com/YOUR_ORG/YOUR_REPO/issues/%s',
+          },
+        },
       },
     ],
   ],

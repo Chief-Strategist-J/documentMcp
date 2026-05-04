@@ -10,68 +10,64 @@ permissions:
   pull-requests: write
   checks: write
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [ 20.x]
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
+      - name: Run tests with coverage
+        run: npm run test:coverage
 
-    - name: Run unit tests
-      run: npm run test:unit
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
 
-    - name: Run tests with coverage
-      run: npm run test:coverage
+      # On PRs: use allure-action to post a comment with the report link
+      - name: Post Allure Report to PR
+        if: github.event_name == 'pull_request'
+        uses: allure-framework/allure-action@v0
+        with:
+          results-directory: ./allure-results
+          issue-name: "Test Results — PR #${{ github.event.pull_request.number }}"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload coverage to Codecov
-      if: matrix.node-version == '20.x'
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage/lcov.info
-        flags: unittests
-        name: codecov-umbrella
+      # On push to main: generate report manually and deploy to GitHub Pages
+      - name: Generate Allure Report
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          npm install -g allure-commandline
+          allure generate allure-results --clean -o allure-report
 
-    - name: Generate Allure Report
-      if: matrix.node-version == '20.x'
-      run: |
-        npm install -g allure-commandline
-        allure generate allure-results --clean -o allure-report
+      - name: Upload Allure Report Artifact
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
+          retention-days: 30
 
-    - name: Upload Allure Report Artifacts
-      if: matrix.node-version == '20.x'
-      uses: actions/upload-artifact@v4
-      with:
-        name: allure-report
-        path: allure-report
-        retention-days: 30
-
-    - name: Deploy Allure Report to GitHub Pages
-      if: github.ref == 'refs/heads/main' && matrix.node-version == '20.x'
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./allure-report
-        destination_dir: allure-report
-
-    - name: Run Allure Action
-      if: matrix.node-version == '20.x' && github.event_name == 'pull_request'
-      uses: allure-framework/allure-action@v0
-      with:
-        report-directory: "./allure-report"
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy Allure Report to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          destination_dir: allure-report
