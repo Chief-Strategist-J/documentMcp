@@ -23,23 +23,38 @@ import {
 export class DocumentClient {
   private baseUrl: string;
   private apiKey?: string;
+  private customHeaders?: Record<string, string | undefined>;
 
   constructor(baseUrl: string, apiKey?: string, customHeaders?: Record<string, string | undefined>) {
     this.baseUrl = baseUrl;
     this.apiKey = apiKey || '';
+    this.customHeaders = customHeaders;
   }
 
   /**
    * Sets authentication headers
    * @param headers - Request headers
+   * @param method - HTTP method
    * @returns Headers with authentication
    */
-  private getHeaders(headers: Record<string, string | undefined> = {}): Record<string, string> {
-    const baseHeaders: Record<string, string> = {
-      'Content-Type': 'application/json'
-    };
+  private getHeaders(headers: Record<string, string | undefined> = {}, method: string = 'GET'): Record<string, string> {
+    const baseHeaders: Record<string, string> = {};
 
-    // Add custom headers
+    // Only add Content-Type for methods that typically have a body
+    if (method !== 'GET' && method !== 'HEAD') {
+      baseHeaders['Content-Type'] = 'application/json';
+    }
+
+    // Add custom headers from constructor
+    if (this.customHeaders) {
+      Object.entries(this.customHeaders).forEach(([key, value]) => {
+        if (value !== undefined) {
+          baseHeaders[key] = value;
+        }
+      });
+    }
+
+    // Add custom headers from request
     Object.entries(headers).forEach(([key, value]) => {
       if (value !== undefined) {
         baseHeaders[key] = value;
@@ -66,9 +81,11 @@ export class DocumentClient {
   ): Promise<ApiResponse<T>> {
     try {
       const url = `${this.baseUrl}${endpoint}`;
+      const method = options.method || 'GET';
       const response = await fetch(url, {
         ...options,
-        headers: this.getHeaders(options.headers as Record<string, string | undefined>)
+        method: method,
+        headers: this.getHeaders(options.headers as Record<string, string | undefined>, method)
       });
 
       const data: any = await response.json();

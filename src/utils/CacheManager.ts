@@ -119,7 +119,7 @@ export class CacheManager<T> {
    */
   private evictOldest(): void {
     let oldestKey = '';
-    let oldestTime = Date.now();
+    let oldestTime = Infinity;
 
     for (const [key, entry] of this.cache.entries()) {
       if (entry.timestamp < oldestTime) {

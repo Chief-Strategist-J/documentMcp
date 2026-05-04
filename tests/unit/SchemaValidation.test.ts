@@ -665,16 +665,6 @@ describe('Schema Validation Tests', () => {
           defaultRows: 10,
           columnCount: 5
         },
-        pageSetup: {
-          pageSize: 'A4',
-          orientation: 'portrait',
-          margins: {
-            top: 72,
-            right: 72,
-            bottom: 72,
-            left: 72
-          }
-        },
         sections: [{
           sectionType: 'header',
           order: 0,

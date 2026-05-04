@@ -1,0 +1,85 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+permissions:
+  pull-requests: write
+  checks: write
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linting
+      run: npm run lint
+
+    - name: Run unit tests
+      run: npm run test:unit
+
+    - name: Run integration tests
+      run: npm run test:integration
+
+    - name: Run MCP tests
+      run: npm run mcp:test
+
+    - name: Run tests with coverage
+      run: npm run test:coverage
+
+    - name: Upload coverage to Codecov
+      if: matrix.node-version == '20.x'
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+
+    - name: Generate Allure Report
+      if: matrix.node-version == '20.x'
+      run: |
+        npm install -g allure-commandline
+        allure generate allure-results --clean -o allure-report
+
+    - name: Upload Allure Report Artifacts
+      if: matrix.node-version == '20.x'
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-report
+        path: allure-report
+        retention-days: 30
+
+    - name: Deploy Allure Report to GitHub Pages
+      if: github.ref == 'refs/heads/main' && matrix.node-version == '20.x'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./allure-report
+        destination_dir: allure-report
+
+    - name: Run Allure Action
+      if: matrix.node-version == '20.x' && github.event_name == 'pull_request'
+      uses: allure-framework/allure-action@v0
+      with:
+        report-directory: "./allure-report"
+        github-token: ${{ secrets.GITHUB_TOKEN }}

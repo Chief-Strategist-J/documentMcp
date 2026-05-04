@@ -105,7 +105,7 @@ describe('CacheManager', () => {
       }, 1100);
     });
 
-    test('should cleanup expired entries', () => {
+    test('should cleanup expired entries', (done) => {
       const key1 = 'key1';
       const key2 = 'key2';
       const shortTtl = 50;
@@ -118,6 +118,7 @@ describe('CacheManager', () => {
         expect(cleaned).toBe(1);
         expect(cacheManager.has(key1)).toBe(false);
         expect(cacheManager.has(key2)).toBe(true);
+        done();
       }, shortTtl + 10);
     });
   });

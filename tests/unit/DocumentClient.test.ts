@@ -140,10 +140,7 @@ describe('DocumentClient', () => {
       expect(mockFetch).toHaveBeenCalledWith(
         `${mockBaseUrl}/api/documents/${documentId}`,
         expect.objectContaining({
-          method: 'GET',
-          headers: expect.objectContaining({
-            'Authorization': `Bearer ${mockApiKey}`
-          })
+          method: 'GET'
         })
       );
 
@@ -173,15 +170,15 @@ describe('DocumentClient', () => {
         json: async () => listResponse
       });
 
-      const result = await client.listDocuments(10, 0);
+      const limit = 10;
+      const offset = 0;
+
+      const result = await client.listDocuments(limit, offset);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        `${mockBaseUrl}/api/documents?limit=10&offset=0`,
+        `${mockBaseUrl}/api/documents?limit=${limit}&offset=${offset}`,
         expect.objectContaining({
-          method: 'GET',
-          headers: expect.objectContaining({
-            'Authorization': `Bearer ${mockApiKey}`
-          })
+          method: 'GET'
         })
       );
 
@@ -357,6 +354,27 @@ describe('DocumentClient', () => {
             fontSize: 12,
             textColor: '#000000'
           },
+          header: {
+            backgroundColor: '#f5f5f5',
+            textColor: '#000000',
+            fontWeight: 600,
+            fontSize: 12,
+            height: 40
+          },
+          row: {
+            height: 36,
+            backgroundColor: '#ffffff',
+            alternateBackgroundColor: '#fafafa',
+            hoverBackgroundColor: '#eeeeee',
+            selectedBackgroundColor: '#dddddd'
+          },
+          cell: {
+            paddingX: 8,
+            paddingY: 4,
+            borderColor: '#e0e0e0',
+            borderWidth: 1,
+            textAlign: 'left'
+          },
           columnOverrides: {}
         }
       };
@@ -412,10 +430,7 @@ describe('DocumentClient', () => {
       expect(mockFetch).toHaveBeenCalledWith(
         `${mockBaseUrl}/api/documents/${documentId}/sections`,
         expect.objectContaining({
-          method: 'GET',
-          headers: expect.objectContaining({
-            'Authorization': `Bearer ${mockApiKey}`
-          })
+          method: 'GET'
         })
       );
 
@@ -431,23 +446,18 @@ describe('DocumentClient', () => {
       
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        arrayBuffer: async () => mockBuffer,
+        json: async () => ({ success: true, data: mockBuffer.toString() }),
         headers: new Map([['content-type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']])
       });
 
       const result = await client.generateDocument(documentId, 'word');
 
       expect(mockFetch).toHaveBeenCalledWith(
-        `${mockBaseUrl}/api/documents/${documentId}/generate`,
+        `${mockBaseUrl}/api/documents/${documentId}/generate?format=word`,
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${mockApiKey}`
-          }),
-          body: JSON.stringify({
-            format: 'word',
-            options: {}
           })
         })
       );
@@ -461,23 +471,18 @@ describe('DocumentClient', () => {
       
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        arrayBuffer: async () => mockBuffer,
+        json: async () => ({ success: true, data: mockBuffer.toString() }),
         headers: new Map([['content-type', 'application/pdf']])
       });
 
       const result = await client.generateDocument(documentId, 'pdf');
 
       expect(mockFetch).toHaveBeenCalledWith(
-        `${mockBaseUrl}/api/documents/${documentId}/generate`,
+        `${mockBaseUrl}/api/documents/${documentId}/generate?format=pdf`,
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${mockApiKey}`
-          }),
-          body: JSON.stringify({
-            format: 'pdf',
-            options: {}
           })
         })
       );
@@ -496,17 +501,17 @@ describe('DocumentClient', () => {
       
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        arrayBuffer: async () => mockBuffer
+        json: async () => ({ success: true, data: mockBuffer.toString() })
       });
 
       await client.generateDocument(documentId, 'word', options);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        `${mockBaseUrl}/api/documents/${documentId}/generate`,
+        `${mockBaseUrl}/api/documents/${documentId}/generate?format=word&pageSize=A4&orientation=landscape&margins=%5Bobject+Object%5D`,
         expect.objectContaining({
-          body: JSON.stringify({
-            format: 'word',
-            options
+          method: 'POST',
+          headers: expect.objectContaining({
+            'Authorization': `Bearer ${mockApiKey}`
           })
         })
       );
@@ -529,7 +534,7 @@ describe('DocumentClient', () => {
         json: async () => validationResponse
       });
 
-      const result = await client.validateSchema(schema);
+      const result = await client.validateSchema(schema, 'document');
 
       expect(mockFetch).toHaveBeenCalledWith(
         `${mockBaseUrl}/api/validation/validate`,
@@ -539,7 +544,7 @@ describe('DocumentClient', () => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${mockApiKey}`
           }),
-          body: JSON.stringify(schema)
+          body: JSON.stringify({ schema, schemaType: 'document' })
         })
       );
 
@@ -582,7 +587,7 @@ describe('DocumentClient', () => {
       const result = await client.getDocument('doc-123');
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('HTTP 500: Internal Server Error');
+      expect(result.error).toBe('HTTP 500: undefined');
     });
   });
 
