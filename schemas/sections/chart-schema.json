@@ -1,0 +1,344 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Chart Section Schema",
+  "type": "object",
+  "required": ["schemaId", "chartType", "data"],
+  "properties": {
+    "schemaId": {
+      "type": "string",
+      "description": "Unique identifier for the chart schema"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "default": "1.0.0",
+      "description": "Version of the schema definition"
+    },
+    "chartType": {
+      "type": "string",
+      "enum": ["bar", "column", "line", "pie", "scatter", "area", "bubble", "radar", "polar", "stock", "surface"],
+      "description": "Type of chart to display"
+    },
+    "title": {
+      "type": "string",
+      "description": "Chart title"
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "Chart subtitle"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "datasets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "Dataset label"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "description": "Data points for the dataset"
+              },
+              "backgroundColor": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "description": "Background colors for data points"
+              },
+              "borderColor": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$"
+                },
+                "description": "Border colors for data points"
+              },
+              "borderWidth": {
+                "type": "integer",
+                "minimum": 0,
+                "default": 1,
+                "description": "Border width for data points"
+              }
+            }
+          },
+          "description": "Array of datasets"
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Labels for data points"
+        }
+      }
+    },
+    "position": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number",
+          "description": "X position in points"
+        },
+        "y": {
+          "type": "number",
+          "description": "Y position in points"
+        },
+        "width": {
+          "type": "number",
+          "minimum": 100,
+          "default": 400,
+          "description": "Chart width in points"
+        },
+        "height": {
+          "type": "number",
+          "minimum": 100,
+          "default": 300,
+          "description": "Chart height in points"
+        },
+        "alignment": {
+          "type": "string",
+          "enum": ["left", "center", "right"],
+          "default": "center",
+          "description": "Chart alignment"
+        }
+      }
+    },
+    "axes": {
+      "type": "object",
+      "properties": {
+        "xAxis": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether X-axis is enabled"
+            },
+            "title": {
+              "type": "string",
+              "description": "X-axis title"
+            },
+            "min": {
+              "type": "number",
+              "description": "Minimum value for X-axis"
+            },
+            "max": {
+              "type": "number",
+              "description": "Maximum value for X-axis"
+            },
+            "gridLines": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to show grid lines"
+            },
+            "tickLabels": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to show tick labels"
+            }
+          }
+        },
+        "yAxis": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether Y-axis is enabled"
+            },
+            "title": {
+              "type": "string",
+              "description": "Y-axis title"
+            },
+            "min": {
+              "type": "number",
+              "description": "Minimum value for Y-axis"
+            },
+            "max": {
+              "type": "number",
+              "description": "Maximum value for Y-axis"
+            },
+            "gridLines": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to show grid lines"
+            },
+            "tickLabels": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to show tick labels"
+            }
+          }
+        }
+      }
+    },
+    "legend": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether legend is enabled"
+        },
+        "position": {
+          "type": "string",
+          "enum": ["top", "bottom", "left", "right"],
+          "default": "bottom",
+          "description": "Legend position"
+        },
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#ffffff",
+          "description": "Legend background color"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Legend text color"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 24,
+          "default": 12,
+          "description": "Legend font size"
+        }
+      }
+    },
+    "styling": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#ffffff",
+          "description": "Chart background color"
+        },
+        "border": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "default": "#000000"
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          }
+        },
+        "colorScheme": {
+          "type": "string",
+          "enum": ["default", "pastel", "vibrant", "monochrome", "custom"],
+          "default": "default",
+          "description": "Color scheme for the chart"
+        },
+        "customColors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          },
+          "description": "Custom color palette (when colorScheme is 'custom')"
+        }
+      }
+    },
+    "animation": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether animation is enabled"
+        },
+        "duration": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 1000,
+          "description": "Animation duration in milliseconds"
+        },
+        "easing": {
+          "type": "string",
+          "enum": ["linear", "easeIn", "easeOut", "easeInOut"],
+          "default": "easeInOut",
+          "description": "Animation easing function"
+        }
+      }
+    },
+    "interactivity": {
+      "type": "object",
+      "properties": {
+        "hover": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether hover effects are enabled"
+        },
+        "click": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether click events are enabled"
+        },
+        "tooltip": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether tooltips are shown"
+        },
+        "zoom": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether zoom is enabled"
+        },
+        "pan": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether panning is enabled"
+        }
+      }
+    },
+    "grid": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether grid is enabled"
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#e0e0e0",
+          "description": "Grid color"
+        },
+        "lineWidth": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 5,
+          "default": 1,
+          "description": "Grid line width"
+        },
+        "dashStyle": {
+          "type": "string",
+          "enum": ["solid", "dashed", "dotted"],
+          "default": "solid",
+          "description": "Grid line style"
+        }
+      }
+    }
+  }
+}

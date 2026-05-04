@@ -1,0 +1,524 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Word Document Styling Schema",
+  "type": "object",
+  "properties": {
+    "document": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#ffffff",
+          "description": "Document background color"
+        },
+        "borderColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#d9d9d9",
+          "description": "Default border color"
+        },
+        "borderWidth": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 1,
+          "description": "Default border width"
+        },
+        "borderRadius": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 4,
+          "description": "Default border radius"
+        },
+        "fontFamily": {
+          "type": "string",
+          "default": "Arial",
+          "description": "Default font family"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72,
+          "default": 14,
+          "description": "Default font size"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Default text color"
+        },
+        "lineSpacing": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 3.0,
+          "default": 1.0,
+          "description": "Default line spacing"
+        },
+        "paragraphSpacing": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Default paragraph spacing in points"
+        }
+      }
+    },
+    "header": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#f5f5f5",
+          "description": "Header background color"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Header text color"
+        },
+        "fontWeight": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 900,
+          "default": 600,
+          "description": "Header font weight"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72,
+          "default": 14,
+          "description": "Header font size"
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 12,
+          "default": 40,
+          "description": "Header height in points"
+        },
+        "border": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "default": "#000000"
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "style": {
+              "type": "string",
+              "enum": ["solid", "dashed", "dotted", "double"],
+              "default": "solid"
+            }
+          }
+        }
+      }
+    },
+    "footer": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#f5f5f5",
+          "description": "Footer background color"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Footer text color"
+        },
+        "fontWeight": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 900,
+          "default": 400,
+          "description": "Footer font weight"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72,
+          "default": 10,
+          "description": "Footer font size"
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 12,
+          "default": 40,
+          "description": "Footer height in points"
+        },
+        "border": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "default": "#000000"
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "style": {
+              "type": "string",
+              "enum": ["solid", "dashed", "dotted", "double"],
+              "default": "solid"
+            }
+          }
+        }
+      }
+    },
+    "table": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#ffffff",
+          "description": "Table background color"
+        },
+        "borderColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#d9d9d9",
+          "description": "Table border color"
+        },
+        "borderWidth": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 1,
+          "description": "Table border width"
+        },
+        "borderRadius": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 4,
+          "description": "Table border radius"
+        },
+        "fontFamily": {
+          "type": "string",
+          "default": "Arial",
+          "description": "Table font family"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72,
+          "default": 12,
+          "description": "Table font size"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Table text color"
+        },
+        "cellPadding": {
+          "type": "object",
+          "properties": {
+            "top": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 4,
+              "description": "Top cell padding in points"
+            },
+            "right": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 4,
+              "description": "Right cell padding in points"
+            },
+            "bottom": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 4,
+              "description": "Bottom cell padding in points"
+            },
+            "left": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 4,
+              "description": "Left cell padding in points"
+            }
+          }
+        }
+      }
+    },
+    "tableHeader": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#f5f5f5",
+          "description": "Table header background color"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Table header text color"
+        },
+        "fontWeight": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 900,
+          "default": 600,
+          "description": "Table header font weight"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72,
+          "default": 12,
+          "description": "Table header font size"
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 12,
+          "default": 30,
+          "description": "Table header row height in points"
+        },
+        "border": {
+          "type": "object",
+          "properties": {
+            "bottom": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "color": {
+                  "type": "string",
+                  "pattern": "^#[0-9A-Fa-f]{6}$",
+                  "default": "#000000"
+                },
+                "width": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "default": 2
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "tableRow": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer",
+          "minimum": 12,
+          "default": 24,
+          "description": "Table row height in points"
+        },
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#ffffff",
+          "description": "Table row background color"
+        },
+        "alternateBackgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#fafafa",
+          "description": "Alternate table row background color"
+        },
+        "hoverBackgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#eeeeee",
+          "description": "Table row hover background color"
+        },
+        "selectedBackgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#dddddd",
+          "description": "Table row selected background color"
+        }
+      }
+    },
+    "tableCell": {
+      "type": "object",
+      "properties": {
+        "paddingX": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 8,
+          "description": "Horizontal cell padding in points"
+        },
+        "paddingY": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 4,
+          "description": "Vertical cell padding in points"
+        },
+        "borderColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#e0e0e0",
+          "description": "Cell border color"
+        },
+        "borderWidth": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 1,
+          "description": "Cell border width"
+        },
+        "textAlign": {
+          "type": "string",
+          "enum": ["left", "center", "right"],
+          "default": "left",
+          "description": "Cell text alignment"
+        },
+        "verticalAlign": {
+          "type": "string",
+          "enum": ["top", "middle", "bottom"],
+          "default": "middle",
+          "description": "Cell vertical alignment"
+        }
+      }
+    },
+    "paragraph": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#ffffff",
+          "description": "Paragraph background color"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Paragraph text color"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72,
+          "default": 12,
+          "description": "Paragraph font size"
+        },
+        "fontWeight": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 900,
+          "default": 400,
+          "description": "Paragraph font weight"
+        },
+        "fontStyle": {
+          "type": "string",
+          "enum": ["normal", "italic"],
+          "default": "normal",
+          "description": "Paragraph font style"
+        },
+        "textDecoration": {
+          "type": "string",
+          "enum": ["none", "underline", "line-through"],
+          "default": "none",
+          "description": "Paragraph text decoration"
+        },
+        "alignment": {
+          "type": "string",
+          "enum": ["left", "center", "right", "justify"],
+          "default": "left",
+          "description": "Paragraph text alignment"
+        },
+        "lineSpacing": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 3.0,
+          "default": 1.0,
+          "description": "Paragraph line spacing"
+        },
+        "paragraphSpacing": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Paragraph spacing in points"
+        },
+        "indentation": {
+          "type": "object",
+          "properties": {
+            "left": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Left indentation in points"
+            },
+            "right": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "description": "Right indentation in points"
+            },
+            "firstLine": {
+              "type": "integer",
+              "minimum": -720,
+              "default": 0,
+              "description": "First line indentation in points"
+            }
+          }
+        }
+      }
+    },
+    "columnOverrides": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "textAlign": {
+            "type": "string",
+            "enum": ["left", "center", "right"],
+            "description": "Column text alignment"
+          },
+          "backgroundColor": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$",
+            "description": "Column background color"
+          },
+          "textColor": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$",
+            "description": "Column text color"
+          },
+          "fontWeight": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 900,
+            "description": "Column font weight"
+          },
+          "fontSize": {
+            "type": "integer",
+            "minimum": 6,
+            "maximum": 72,
+            "description": "Column font size"
+          }
+        }
+      },
+      "default": {},
+      "description": "Style overrides for specific columns"
+    }
+  }
+}

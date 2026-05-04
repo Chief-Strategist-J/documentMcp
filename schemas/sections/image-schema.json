@@ -1,0 +1,300 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Image Section Schema",
+  "type": "object",
+  "required": ["schemaId", "imagePath"],
+  "properties": {
+    "schemaId": {
+      "type": "string",
+      "description": "Unique identifier for the image schema"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "default": "1.0.0",
+      "description": "Version of the schema definition"
+    },
+    "imagePath": {
+      "type": "string",
+      "description": "Path to the image file"
+    },
+    "imageData": {
+      "type": "string",
+      "description": "Base64 encoded image data (alternative to imagePath)"
+    },
+    "altText": {
+      "type": "string",
+      "description": "Alternative text for accessibility"
+    },
+    "position": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number",
+          "description": "X position in points"
+        },
+        "y": {
+          "type": "number",
+          "description": "Y position in points"
+        },
+        "width": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Width in points"
+        },
+        "height": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Height in points"
+        },
+        "alignment": {
+          "type": "string",
+          "enum": ["left", "center", "right"],
+          "default": "left",
+          "description": "Image alignment"
+        },
+        "textWrap": {
+          "type": "string",
+          "enum": ["inline", "square", "tight", "through", "topBottom", "none"],
+          "default": "inline",
+          "description": "Text wrapping behavior"
+        }
+      }
+    },
+    "sizing": {
+      "type": "object",
+      "properties": {
+        "scale": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 10,
+          "default": 1,
+          "description": "Scale factor"
+        },
+        "maintainAspectRatio": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to maintain aspect ratio"
+        },
+        "fitMode": {
+          "type": "string",
+          "enum": ["fill", "fit", "stretch", "center"],
+          "default": "fit",
+          "description": "How image fits within specified dimensions"
+        },
+        "maxWidth": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Maximum width in points"
+        },
+        "maxHeight": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Maximum height in points"
+        }
+      }
+    },
+    "cropping": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether cropping is enabled"
+        },
+        "x": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0,
+          "description": "X offset for cropping in pixels"
+        },
+        "y": {
+          "type": "number",
+          "minimum": 0,
+          "default": 0,
+          "description": "Y offset for cropping in pixels"
+        },
+        "width": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Width of crop area in pixels"
+        },
+        "height": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Height of crop area in pixels"
+        }
+      }
+    },
+    "border": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether border is enabled"
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Border color in hex format"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1,
+          "description": "Border width in points"
+        },
+        "style": {
+          "type": "string",
+          "enum": ["solid", "dashed", "dotted", "double"],
+          "default": "solid",
+          "description": "Border style"
+        },
+        "radius": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Border radius for rounded corners"
+        }
+      }
+    },
+    "effects": {
+      "type": "object",
+      "properties": {
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1,
+          "description": "Image opacity (0 = transparent, 1 = opaque)"
+        },
+        "brightness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2,
+          "default": 1,
+          "description": "Brightness adjustment"
+        },
+        "contrast": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2,
+          "default": 1,
+          "description": "Contrast adjustment"
+        },
+        "saturation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2,
+          "default": 1,
+          "description": "Saturation adjustment"
+        },
+        "grayscale": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to convert to grayscale"
+        },
+        "sepia": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to apply sepia tone"
+        },
+        "blur": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10,
+          "default": 0,
+          "description": "Blur radius"
+        }
+      }
+    },
+    "shadow": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether shadow is enabled"
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#808080",
+          "description": "Shadow color in hex format"
+        },
+        "offsetX": {
+          "type": "number",
+          "default": 2,
+          "description": "Horizontal shadow offset in points"
+        },
+        "offsetY": {
+          "type": "number",
+          "default": 2,
+          "description": "Vertical shadow offset in points"
+        },
+        "blur": {
+          "type": "number",
+          "minimum": 0,
+          "default": 4,
+          "description": "Shadow blur radius in points"
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5,
+          "description": "Shadow opacity"
+        }
+      }
+    },
+    "caption": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Caption text"
+        },
+        "position": {
+          "type": "string",
+          "enum": ["top", "bottom", "left", "right"],
+          "default": "bottom",
+          "description": "Caption position relative to image"
+        },
+        "formatting": {
+          "type": "object",
+          "properties": {
+            "fontSize": {
+              "type": "integer",
+              "minimum": 6,
+              "maximum": 72,
+              "default": 10
+            },
+            "fontFamily": {
+              "type": "string",
+              "default": "Arial"
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "default": "#000000"
+            },
+            "alignment": {
+              "type": "string",
+              "enum": ["left", "center", "right"],
+              "default": "center"
+            },
+            "bold": {
+              "type": "boolean",
+              "default": false
+            },
+            "italic": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      }
+    }
+  }
+}

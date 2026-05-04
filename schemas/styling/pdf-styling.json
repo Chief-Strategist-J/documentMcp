@@ -1,0 +1,702 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PDF Document Styling Schema",
+  "type": "object",
+  "properties": {
+    "document": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#ffffff",
+          "description": "Document background color"
+        },
+        "borderColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#d9d9d9",
+          "description": "Default border color"
+        },
+        "borderWidth": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 1,
+          "description": "Default border width"
+        },
+        "fontFamily": {
+          "type": "string",
+          "enum": ["Arial", "Helvetica", "Times New Roman", "Courier New", "Verdana", "Georgia"],
+          "default": "Arial",
+          "description": "Default font family (PDF-compatible fonts)"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72,
+          "default": 12,
+          "description": "Default font size"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Default text color"
+        },
+        "lineSpacing": {
+          "type": "number",
+          "minimum": 0.8,
+          "maximum": 3.0,
+          "default": 1.2,
+          "description": "Default line spacing (PDF typically uses 1.2)"
+        },
+        "paragraphSpacing": {
+          "type": "number",
+          "minimum": 0,
+          "default": 6,
+          "description": "Default paragraph spacing in points"
+        }
+      }
+    },
+    "page": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "type": "string",
+          "enum": ["A4", "Letter", "Legal", "A3", "A5"],
+          "default": "A4",
+          "description": "Page size"
+        },
+        "orientation": {
+          "type": "string",
+          "enum": ["portrait", "landscape"],
+          "default": "portrait",
+          "description": "Page orientation"
+        },
+        "margins": {
+          "type": "object",
+          "properties": {
+            "top": {
+              "type": "number",
+              "minimum": 0,
+              "default": 72,
+              "description": "Top margin in points"
+            },
+            "right": {
+              "type": "number",
+              "minimum": 0,
+              "default": 72,
+              "description": "Right margin in points"
+            },
+            "bottom": {
+              "type": "number",
+              "minimum": 0,
+              "default": 72,
+              "description": "Bottom margin in points"
+            },
+            "left": {
+              "type": "number",
+              "minimum": 0,
+              "default": 72,
+              "description": "Left margin in points"
+            }
+          }
+        },
+        "bleed": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether bleed is enabled"
+            },
+            "size": {
+              "type": "number",
+              "minimum": 0,
+              "default": 9,
+              "description": "Bleed size in points"
+            }
+          }
+        }
+      }
+    },
+    "header": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#f5f5f5",
+          "description": "Header background color"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Header text color"
+        },
+        "fontWeight": {
+          "type": "string",
+          "enum": ["normal", "bold", "bolder", "lighter"],
+          "default": "bold",
+          "description": "Header font weight"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72,
+          "default": 10,
+          "description": "Header font size"
+        },
+        "height": {
+          "type": "number",
+          "minimum": 12,
+          "default": 36,
+          "description": "Header height in points"
+        },
+        "padding": {
+          "type": "object",
+          "properties": {
+            "top": {
+              "type": "number",
+              "minimum": 0,
+              "default": 6,
+              "description": "Top padding in points"
+            },
+            "right": {
+              "type": "number",
+              "minimum": 0,
+              "default": 12,
+              "description": "Right padding in points"
+            },
+            "bottom": {
+              "type": "number",
+              "minimum": 0,
+              "default": 6,
+              "description": "Bottom padding in points"
+            },
+            "left": {
+              "type": "number",
+              "minimum": 0,
+              "default": 12,
+              "description": "Left padding in points"
+            }
+          }
+        },
+        "border": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "default": "#000000"
+            },
+            "width": {
+              "type": "number",
+              "minimum": 0.5,
+              "default": 0.5,
+              "description": "Border width in points"
+            },
+            "position": {
+              "type": "string",
+              "enum": ["bottom", "top", "both"],
+              "default": "bottom"
+            }
+          }
+        }
+      }
+    },
+    "footer": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#f5f5f5",
+          "description": "Footer background color"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Footer text color"
+        },
+        "fontWeight": {
+          "type": "string",
+          "enum": ["normal", "bold", "bolder", "lighter"],
+          "default": "normal",
+          "description": "Footer font weight"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72,
+          "default": 9,
+          "description": "Footer font size"
+        },
+        "height": {
+          "type": "number",
+          "minimum": 12,
+          "default": 36,
+          "description": "Footer height in points"
+        },
+        "padding": {
+          "type": "object",
+          "properties": {
+            "top": {
+              "type": "number",
+              "minimum": 0,
+              "default": 6,
+              "description": "Top padding in points"
+            },
+            "right": {
+              "type": "number",
+              "minimum": 0,
+              "default": 12,
+              "description": "Right padding in points"
+            },
+            "bottom": {
+              "type": "number",
+              "minimum": 0,
+              "default": 6,
+              "description": "Bottom padding in points"
+            },
+            "left": {
+              "type": "number",
+              "minimum": 0,
+              "default": 12,
+              "description": "Left padding in points"
+            }
+          }
+        },
+        "border": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "default": "#000000"
+            },
+            "width": {
+              "type": "number",
+              "minimum": 0.5,
+              "default": 0.5,
+              "description": "Border width in points"
+            },
+            "position": {
+              "type": "string",
+              "enum": ["top", "bottom", "both"],
+              "default": "top"
+            }
+          }
+        }
+      }
+    },
+    "table": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#ffffff",
+          "description": "Table background color"
+        },
+        "borderColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Table border color"
+        },
+        "borderWidth": {
+          "type": "number",
+          "minimum": 0.5,
+          "default": 0.5,
+          "description": "Table border width in points"
+        },
+        "borderCollapse": {
+          "type": "string",
+          "enum": ["collapse", "separate"],
+          "default": "collapse",
+          "description": "Table border collapse behavior"
+        },
+        "fontFamily": {
+          "type": "string",
+          "enum": ["Arial", "Helvetica", "Times New Roman", "Courier New", "Verdana", "Georgia"],
+          "default": "Arial",
+          "description": "Table font family"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72,
+          "default": 10,
+          "description": "Table font size"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Table text color"
+        },
+        "cellPadding": {
+          "type": "object",
+          "properties": {
+            "top": {
+              "type": "number",
+              "minimum": 0,
+              "default": 4,
+              "description": "Top cell padding in points"
+            },
+            "right": {
+              "type": "number",
+              "minimum": 0,
+              "default": 6,
+              "description": "Right cell padding in points"
+            },
+            "bottom": {
+              "type": "number",
+              "minimum": 0,
+              "default": 4,
+              "description": "Bottom cell padding in points"
+            },
+            "left": {
+              "type": "number",
+              "minimum": 0,
+              "default": 6,
+              "description": "Left cell padding in points"
+            }
+          }
+        }
+      }
+    },
+    "tableHeader": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#e8e8e8",
+          "description": "Table header background color"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Table header text color"
+        },
+        "fontWeight": {
+          "type": "string",
+          "enum": ["normal", "bold", "bolder", "lighter"],
+          "default": "bold",
+          "description": "Table header font weight"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72,
+          "default": 10,
+          "description": "Table header font size"
+        },
+        "height": {
+          "type": "number",
+          "minimum": 12,
+          "default": 24,
+          "description": "Table header row height in points"
+        },
+        "repeatOnEveryPage": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to repeat header on every page"
+        }
+      }
+    },
+    "tableRow": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "number",
+          "minimum": 12,
+          "default": 20,
+          "description": "Table row height in points"
+        },
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#ffffff",
+          "description": "Table row background color"
+        },
+        "alternateBackgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#f8f8f8",
+          "description": "Alternate table row background color"
+        }
+      }
+    },
+    "tableCell": {
+      "type": "object",
+      "properties": {
+        "paddingX": {
+          "type": "number",
+          "minimum": 0,
+          "default": 6,
+          "description": "Horizontal cell padding in points"
+        },
+        "paddingY": {
+          "type": "number",
+          "minimum": 0,
+          "default": 4,
+          "description": "Vertical cell padding in points"
+        },
+        "borderColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Cell border color"
+        },
+        "borderWidth": {
+          "type": "number",
+          "minimum": 0.5,
+          "default": 0.5,
+          "description": "Cell border width in points"
+        },
+        "textAlign": {
+          "type": "string",
+          "enum": ["left", "center", "right", "justify"],
+          "default": "left",
+          "description": "Cell text alignment"
+        },
+        "verticalAlign": {
+          "type": "string",
+          "enum": ["top", "middle", "bottom"],
+          "default": "middle",
+          "description": "Cell vertical alignment"
+        }
+      }
+    },
+    "paragraph": {
+      "type": "object",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#ffffff",
+          "description": "Paragraph background color"
+        },
+        "textColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "default": "#000000",
+          "description": "Paragraph text color"
+        },
+        "fontSize": {
+          "type": "integer",
+          "minimum": 6,
+          "maximum": 72,
+          "default": 12,
+          "description": "Paragraph font size"
+        },
+        "fontWeight": {
+          "type": "string",
+          "enum": ["normal", "bold", "bolder", "lighter"],
+          "default": "normal",
+          "description": "Paragraph font weight"
+        },
+        "fontStyle": {
+          "type": "string",
+          "enum": ["normal", "italic"],
+          "default": "normal",
+          "description": "Paragraph font style"
+        },
+        "textDecoration": {
+          "type": "string",
+          "enum": ["none", "underline", "line-through"],
+          "default": "none",
+          "description": "Paragraph text decoration"
+        },
+        "alignment": {
+          "type": "string",
+          "enum": ["left", "center", "right", "justify"],
+          "default": "left",
+          "description": "Paragraph text alignment"
+        },
+        "lineSpacing": {
+          "type": "number",
+          "minimum": 0.8,
+          "maximum": 3.0,
+          "default": 1.2,
+          "description": "Paragraph line spacing"
+        },
+        "paragraphSpacing": {
+          "type": "number",
+          "minimum": 0,
+          "default": 6,
+          "description": "Paragraph spacing in points"
+        },
+        "indentation": {
+          "type": "object",
+          "properties": {
+            "left": {
+              "type": "number",
+              "minimum": 0,
+              "default": 0,
+              "description": "Left indentation in points"
+            },
+            "right": {
+              "type": "number",
+              "minimum": 0,
+              "default": 0,
+              "description": "Right indentation in points"
+            },
+            "firstLine": {
+              "type": "number",
+              "minimum": -720,
+              "default": 0,
+              "description": "First line indentation in points"
+            }
+          }
+        }
+      }
+    },
+    "columnOverrides": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "textAlign": {
+            "type": "string",
+            "enum": ["left", "center", "right", "justify"],
+            "description": "Column text alignment"
+          },
+          "backgroundColor": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$",
+            "description": "Column background color"
+          },
+          "textColor": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$",
+            "description": "Column text color"
+          },
+          "fontWeight": {
+            "type": "string",
+            "enum": ["normal", "bold", "bolder", "lighter"],
+            "description": "Column font weight"
+          },
+          "fontSize": {
+            "type": "integer",
+            "minimum": 6,
+            "maximum": 72,
+            "description": "Column font size"
+          }
+        }
+      },
+      "default": {},
+      "description": "Style overrides for specific columns"
+    },
+    "pdfSpecific": {
+      "type": "object",
+      "properties": {
+        "compression": {
+          "type": "string",
+          "enum": ["none", "flate", "deflate"],
+          "default": "flate",
+          "description": "PDF compression method"
+        },
+        "optimizeFor": {
+          "type": "string",
+          "enum": ["screen", "print", "ebook", "prepress"],
+          "default": "print",
+          "description": "PDF optimization target"
+        },
+        "embedFonts": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to embed fonts in PDF"
+        },
+        "subsetFonts": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to subset embedded fonts"
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "PDF title metadata"
+            },
+            "author": {
+              "type": "string",
+              "description": "PDF author metadata"
+            },
+            "subject": {
+              "type": "string",
+              "description": "PDF subject metadata"
+            },
+            "keywords": {
+              "type": "string",
+              "description": "PDF keywords metadata"
+            },
+            "creator": {
+              "type": "string",
+              "default": "Document Management SDK",
+              "description": "PDF creator metadata"
+            },
+            "producer": {
+              "type": "string",
+              "default": "Document Management SDK",
+              "description": "PDF producer metadata"
+            }
+          }
+        },
+        "security": {
+          "type": "object",
+          "properties": {
+            "userPassword": {
+              "type": "string",
+              "description": "User password for PDF"
+            },
+            "ownerPassword": {
+              "type": "string",
+              "description": "Owner password for PDF"
+            },
+            "permissions": {
+              "type": "object",
+              "properties": {
+                "print": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Allow printing"
+                },
+                "copy": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Allow copying content"
+                },
+                "modify": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Allow modification"
+                },
+                "annotate": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Allow annotations"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Document Layout Schema",
+  "type": "object",
+  "required": ["schemaId", "tableName"],
+  "properties": {
+    "schemaId": {
+      "type": "string",
+      "description": "Unique identifier for the document layout schema"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "default": "1.0.0",
+      "description": "Version of the schema definition"
+    },
+    "tableName": {
+      "type": "string",
+      "default": "",
+      "description": "Name of the document table"
+    },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "minRows": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Minimum number of rows allowed"
+        },
+        "maxRows": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1000,
+          "description": "Maximum number of rows allowed"
+        },
+        "defaultRows": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Default number of rows to create"
+        },
+        "columnCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of columns in the document"
+        }
+      }
+    },
+    "pageSetup": {
+      "type": "object",
+      "properties": {
+        "pageSize": {
+          "type": "string",
+          "enum": ["A4", "Letter", "Legal"],
+          "default": "A4",
+          "description": "Page size for the document"
+        },
+        "orientation": {
+          "type": "string",
+          "enum": ["portrait", "landscape"],
+          "default": "portrait",
+          "description": "Page orientation"
+        },
+        "margins": {
+          "type": "object",
+          "properties": {
+            "top": {
+              "type": "number",
+              "default": 72,
+              "description": "Top margin in points"
+            },
+            "right": {
+              "type": "number",
+              "default": 72,
+              "description": "Right margin in points"
+            },
+            "bottom": {
+              "type": "number",
+              "default": 72,
+              "description": "Bottom margin in points"
+            },
+            "left": {
+              "type": "number",
+              "default": 72,
+              "description": "Left margin in points"
+            }
+          }
+        }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sectionType": {
+            "type": "string",
+            "enum": ["header", "footer", "table", "paragraph", "image", "chart"],
+            "description": "Type of section"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Order of the section in the document"
+          },
+          "repeatOnPages": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether this section repeats on each page"
+          }
+        }
+      }
+    }
+  }
+}

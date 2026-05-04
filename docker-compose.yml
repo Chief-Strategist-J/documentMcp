@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: document_management_db
+    environment:
+      POSTGRES_DB: document_management
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - document_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ceph:
+    image: ceph/daemon:latest
+    container_name: document_management_ceph
+    environment:
+      CEPH_DEMO_UID: 0
+      CEPH_DEMO_GID: 0
+      CEPH_DEMO_ACCESS_KEY: admin
+      CEPH_DEMO_SECRET_KEY: admin123
+      CEPH_DEMO_PUBLIC_IPV4: 127.0.0.1
+    ports:
+      - "5000:5000"  # RGW HTTP endpoint
+      - "8080:8080"  # RGW S3 endpoint
+    volumes:
+      - ceph_data:/var/lib/ceph
+    networks:
+      - document_network
+    privileged: true
+    command: ceph-demo
+
+  # Document Management API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: document_management_api
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/document_management
+      PORT: 3000
+      CORS_ORIGIN: "*"
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - document_network
+    volumes:
+      - ./schemas:/app/schemas:ro
+      - ./generated_documents:/app/generated_documents
+    restart: unless-stopped
+
+  # MCP Server
+  mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp
+    container_name: document_management_mcp
+    environment:
+      BASE_URL: http://api:3000
+      API_KEY: ${API_KEY:-}
+      NODE_ENV: ${NODE_ENV:-production}
+    depends_on:
+      api:
+        condition: service_started
+    networks:
+      - document_network
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # Nginx Reverse Proxy (Optional)
+  nginx:
+    image: nginx:alpine
+    container_name: document_management_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - api
+    networks:
+      - document_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  ceph_data:
+    driver: local
+
+networks:
+  document_network:
+    driver: bridge

@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Header/Footer Section Schema",
+  "type": "object",
+  "required": ["schemaId", "type", "content"],
+  "properties": {
+    "schemaId": {
+      "type": "string",
+      "description": "Unique identifier for the header/footer schema"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "default": "1.0.0",
+      "description": "Version of the schema definition"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["header", "footer"],
+      "description": "Type of section (header or footer)"
+    },
+    "content": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "contentType": {
+            "type": "string",
+            "enum": ["text", "image", "pageNumber", "date", "table"],
+            "description": "Type of content element"
+          },
+          "text": {
+            "type": "string",
+            "description": "Text content (for text type)"
+          },
+          "imagePath": {
+            "type": "string",
+            "description": "Path to image file (for image type)"
+          },
+          "format": {
+            "type": "string",
+            "description": "Format string for date or page number"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "number",
+                "description": "X position in points"
+              },
+              "y": {
+                "type": "number",
+                "description": "Y position in points"
+              },
+              "width": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Width in points"
+              },
+              "height": {
+                "type": "number",
+                "minimum": 0,
+                "description": "Height in points"
+              }
+            }
+          },
+          "formatting": {
+            "type": "object",
+            "properties": {
+              "bold": {
+                "type": "boolean",
+                "default": false
+              },
+              "italic": {
+                "type": "boolean",
+                "default": false
+              },
+              "underline": {
+                "type": "boolean",
+                "default": false
+              },
+              "fontSize": {
+                "type": "integer",
+                "minimum": 6,
+                "maximum": 72,
+                "default": 10
+              },
+              "fontFamily": {
+                "type": "string",
+                "default": "Arial"
+              },
+              "color": {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$",
+                "default": "#000000"
+              },
+              "alignment": {
+                "type": "string",
+                "enum": ["left", "center", "right"],
+                "default": "center"
+              }
+            }
+          }
+        }
+      },
+      "description": "Array of content elements in the header/footer"
+    },
+    "layout": {
+      "type": "object",
+      "properties": {
+        "height": {
+          "type": "integer",
+          "minimum": 12,
+          "default": 48,
+          "description": "Height of header/footer in points"
+        },
+        "margins": {
+          "type": "object",
+          "properties": {
+            "top": {
+              "type": "integer",
+              "default": 12,
+              "description": "Top margin in points"
+            },
+            "right": {
+              "type": "integer",
+              "default": 12,
+              "description": "Right margin in points"
+            },
+            "bottom": {
+              "type": "integer",
+              "default": 12,
+              "description": "Bottom margin in points"
+            },
+            "left": {
+              "type": "integer",
+              "default": 12,
+              "description": "Left margin in points"
+            }
+          }
+        },
+        "border": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "default": "#000000"
+            },
+            "width": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "position": {
+              "type": "string",
+              "enum": ["top", "bottom", "both"],
+              "default": "bottom"
+            }
+          }
+        }
+      }
+    },
+    "repeatBehavior": {
+      "type": "object",
+      "properties": {
+        "repeatOnPages": {
+          "type": "string",
+          "enum": ["all", "first", "odd", "even", "custom"],
+          "default": "all",
+          "description": "Which pages to repeat on"
+        },
+        "differentFirstPage": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether first page has different header/footer"
+        },
+        "differentOddEvenPages": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether odd and even pages have different headers/footers"
+        },
+        "customPages": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "description": "Specific page numbers for custom repeat behavior"
+        }
+      }
+    },
+    "background": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "description": "Background color in hex format"
+        },
+        "imagePath": {
+          "type": "string",
+          "description": "Path to background image"
+        },
+        "transparency": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0
+        }
+      }
+    }
+  }
+}
