@@ -40,7 +40,7 @@ jobs:
           flags: unittests
           name: codecov-umbrella
 
-      # On PRs: use allure-action to post a comment with the report link
+      # On PRs: post allure comment on the PR
       - name: Post Allure Report to PR
         if: github.event_name == 'pull_request'
         uses: allure-framework/allure-action@v0
@@ -49,21 +49,25 @@ jobs:
           issue-name: "Test Results — PR #${{ github.event.pull_request.number }}"
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # On push to main: generate report manually and deploy to GitHub Pages
-      - name: Generate Allure Report
+      # On push to main: generate single-file report (no CORS, opens anywhere)
+      - name: Install Allure CLI
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          npm install -g allure-commandline
-          allure generate allure-results --clean -o allure-report
+        run: npm install -g allure-commandline
 
+      - name: Generate Allure Report (single-file)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: allure generate allure-results --single-file --clean -o allure-report
+
+      # Upload as artifact — downloads and opens directly in browser, no server needed
       - name: Upload Allure Report Artifact
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
-          path: allure-report
+          path: allure-report/index.html   # single file only, not the whole folder
           retention-days: 30
 
+      # Also deploy to GitHub Pages for permanent URL access
       - name: Deploy Allure Report to GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v3
@@ -71,3 +75,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./allure-report
           destination_dir: allure-report
+          keep_files: true                 # don't wipe previous reports on each deploy
